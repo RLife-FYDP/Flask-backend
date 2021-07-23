@@ -8,7 +8,7 @@ class User(db.Model):
     last_name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    profile_link = db.Column(db.String(255))
+    profile_img_link = db.Column(db.String(255))
     gender = db.Column(db.String(255), nullable=False)
     birthday = db.Column(db.DateTime())
     password_digest = db.Column(db.String(255))
@@ -19,6 +19,7 @@ class User(db.Model):
     location = db.relationship('UserLocation', backref='user', lazy=True, uselist=False)
     setting = db.relationship('Setting', backref='user', lazy=True, uselist=False)
     tasks = db.relationship("Task", secondary="assignments", viewonly=True)
+    expense_items = db.relationship("ExpenseItem", secondary="user_expenses", viewonly=True)
 
     created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
@@ -139,6 +140,33 @@ class Task(db.Model):
 
     messages = db.relationship('TaskMessage', backref='task', lazy=True)
     users = db.relationship("User", secondary="assignments", viewonly=True)
+
+    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
+
+
+class ExpenseItem(db.Model):
+    __tablename__ = 'expense_items'
+    id = db.Column(db.Integer, primary_key=True)
+    total_amount = db.Column(db.Integer, nullable=False)
+    receipt_img_link = db.Column(db.String(255))
+    paid_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    users = db.relationship("User", secondary="user_expenses", viewonly=True)
+
+    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
+
+
+class UserExpense(db.Model):
+    __tablename__ = 'user_expenses'
+    expense_item_id = db.Column(db.Integer, db.ForeignKey('expense_items.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    amount = db.Column(db.Integer, nullable=False)
+    paid_at = db.Column(db.DateTime)
+
+    expense_item = db.relationship('ExpenseItem', backref='user_expenses')
+    user = db.relationship('User', backref='user_expenses')
 
     created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)

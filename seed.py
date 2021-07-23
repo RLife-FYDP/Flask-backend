@@ -59,7 +59,7 @@ for i in range(10):
         last_name=faker.last_name(),
         email=faker.ascii_email(),
         age=random.randrange(18, 30),
-        profile_link=faker.image_url(),
+        profile_img_link=faker.image_url(),
         gender="Male" if i % 2 == 0 else "Female",
         birthday=faker.date_of_birth(),
         password_digest=faker.password(length=255),
@@ -98,6 +98,25 @@ for task in tasks:
     for i in range(random.randrange(len(users))):
         task.assignments.append(
             Assignment(user=users[i], task=task, completed_at=faker.date() if bool(random.getrandbits(1)) else None)
+        )
+
+for _ in range(5):
+    expense_item = ExpenseItem(
+        total_amount=random.randrange(1, 1000),
+        paid_by_id=random.choice(users).id,
+        receipt_img_link=faker.image_url(),
+    )
+
+    db.session.add(expense_item)
+
+expense_items = ExpenseItem.query.all()
+for expense_item in expense_items:
+    for i in range(random.randrange(len(users))):
+        expense_item.user_expenses.append(
+            UserExpense(
+                user=users[i], expense_item=expense_item, amount=random.randrange(1, expense_item.total_amount),
+                paid_at=faker.date() if bool(random.getrandbits(1)) else None
+            )
         )
 
 db.session.commit()
