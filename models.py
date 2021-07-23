@@ -18,9 +18,10 @@ class User(db.Model):
 
     location = db.relationship('UserLocation', backref='user', lazy=True, uselist=False)
     setting = db.relationship('Setting', backref='user', lazy=True, uselist=False)
+    tasks = db.relationship("Task", secondary="assignments", viewonly=True)
 
-    created_on = db.Column(db.DateTime, server_default=db.func.now())
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
 
 
 class Location(db.Model):
@@ -30,8 +31,8 @@ class Location(db.Model):
     longitude = db.Column(db.Float, nullable=False)
     type = db.Column(db.String(20))
 
-    created_on = db.Column(db.DateTime, server_default=db.func.now())
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': 'location',
@@ -62,8 +63,8 @@ class Setting(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    created_on = db.Column(db.DateTime, server_default=db.func.now())
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
 
 
 class Suite(db.Model):
@@ -76,8 +77,8 @@ class Suite(db.Model):
     messages = db.relationship('SuiteMessage', backref='suite', lazy=True)
     location = db.relationship('SuiteLocation', backref='suite', lazy=True, uselist=False)
 
-    created_on = db.Column(db.DateTime, server_default=db.func.now())
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
 
 
 class Message(db.Model):
@@ -86,8 +87,8 @@ class Message(db.Model):
     content = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(20))
 
-    created_on = db.Column(db.DateTime, server_default=db.func.now())
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': 'message',
@@ -102,4 +103,42 @@ class SuiteMessage(Message):
         'polymorphic_identity': 'suite_message'
     }
 
-# class TaskMessage(db.Model):
+
+class TaskMessage(Message):
+    task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'))
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'task_message'
+    }
+
+
+class Assignment(db.Model):
+    __tablename__ = 'assignments'
+    task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    completed_at = db.Column(db.DateTime)
+
+    task = db.relationship('Task', backref='assignments')
+    user = db.relationship('User', backref='assignments')
+
+    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
+
+
+class Task(db.Model):
+    __tablename__ = 'tasks'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.String(255), nullable=False)
+    priority = db.Column(db.Integer, nullable=False)
+    completed = db.Column(db.Boolean, nullable=False)
+    tags = db.Column(db.String(255), nullable=False)
+    points = db.Column(db.Integer, nullable=False)
+    start_time = db.Column(db.DateTime, nullable=False)
+    due_date = db.Column(db.DateTime, nullable=False)
+
+    messages = db.relationship('TaskMessage', backref='task', lazy=True)
+    users = db.relationship("User", secondary="assignments", viewonly=True)
+
+    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)

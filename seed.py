@@ -71,5 +71,34 @@ for i in range(10):
 
     db.session.add(user)
 
+for i in range(5):
+    messages = []
+    for _ in range(3):
+        messages.append(TaskMessage(
+            content=faker.text(),
+        ))
+
+    task = Task(
+        title=faker.text(max_nb_chars=random.randrange(10, 20)),
+        description=faker.text(max_nb_chars=random.randrange(20, 50)),
+        priority=random.randrange(1, 10),
+        completed=faker.boolean(),
+        tags=faker.text(max_nb_chars=random.randrange(5, 15)),
+        points=random.randrange(1, 10),
+        start_time=faker.date(),
+        due_date=faker.date(),
+        messages=messages,
+    )
+
+    db.session.add(task)
+
+tasks = Task.query.all()
+users = User.query.all()
+for task in tasks:
+    for i in range(random.randrange(len(users))):
+        task.assignments.append(
+            Assignment(user=users[i], task=task, completed_at=faker.date() if bool(random.getrandbits(1)) else None)
+        )
+
 db.session.commit()
 db.session.close()
