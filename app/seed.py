@@ -2,7 +2,7 @@ import random
 
 from faker import Faker
 
-from models import *
+from app.base.models import *
 
 faker = Faker()
 

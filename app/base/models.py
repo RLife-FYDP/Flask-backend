@@ -1,7 +1,16 @@
 from app import db
 
 
-class User(db.Model):
+class Base(db.Model):
+    __abstract__ = True
+
+    id = db.Column(db.Integer, primary_key=True)
+    created_on = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_on = db.Column(db.DateTime, default=db.func.current_timestamp(),
+                           onupdate=db.func.current_timestamp())
+
+
+class User(Base):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(255), nullable=False)
@@ -25,7 +34,7 @@ class User(db.Model):
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
 
 
-class Location(db.Model):
+class Location(Base):
     __tablename__ = 'locations'
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.Float, nullable=False)
@@ -57,7 +66,7 @@ class UserLocation(Location):
     }
 
 
-class Setting(db.Model):
+class Setting(Base):
     __tablename__ = 'settings'
     id = db.Column(db.Integer, primary_key=True)
     setting = db.Column(db.Text, nullable=False)
@@ -68,7 +77,7 @@ class Setting(db.Model):
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
 
 
-class Suite(db.Model):
+class Suite(Base):
     __tablename__ = 'suites'
     id = db.Column(db.Integer, primary_key=True)
     active = db.Column(db.Boolean, nullable=False)
@@ -82,7 +91,7 @@ class Suite(db.Model):
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
 
 
-class Message(db.Model):
+class Message(Base):
     __tablename__ = 'messages'
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(255), nullable=False)
@@ -113,7 +122,7 @@ class TaskMessage(Message):
     }
 
 
-class Assignment(db.Model):
+class Assignment(Base):
     __tablename__ = 'assignments'
     task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
@@ -126,7 +135,7 @@ class Assignment(db.Model):
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
 
 
-class Task(db.Model):
+class Task(Base):
     __tablename__ = 'tasks'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
@@ -145,7 +154,7 @@ class Task(db.Model):
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
 
 
-class ExpenseItem(db.Model):
+class ExpenseItem(Base):
     __tablename__ = 'expense_items'
     id = db.Column(db.Integer, primary_key=True)
     total_amount = db.Column(db.Integer, nullable=False)
@@ -158,7 +167,7 @@ class ExpenseItem(db.Model):
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
 
 
-class UserExpense(db.Model):
+class UserExpense(Base):
     __tablename__ = 'user_expenses'
     expense_item_id = db.Column(db.Integer, db.ForeignKey('expense_items.id'), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
