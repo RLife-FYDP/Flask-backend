@@ -24,13 +24,19 @@ def not_found(error):
 
 
 # Import a module / component using its blueprint handler variable
+@app.route('/')
+def default_page():
+    return "This is default page, nothing here yet"
+
+
 from app.users.controllers import users as users_module
 
 # Register blueprint(s)
 app.register_blueprint(users_module)
+print(app.url_map)
 # app.register_blueprint(xyz_module)
 # ..
 
 # Build the database:
 # This will create the database file using SQLAlchemy
-db.create_all()
+# db.create_all()
