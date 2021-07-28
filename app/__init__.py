@@ -1,6 +1,6 @@
 # Import flask and template operators
 from flask import Flask, render_template
-
+from flask_marshmallow import Marshmallow
 # Import SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
 
@@ -13,6 +13,7 @@ app.config.from_object('config')
 # Define the database object which is imported
 # by modules and controllers
 db = SQLAlchemy(app)
+ma = Marshmallow(app)
 
 
 # Sample HTTP error handling
@@ -22,11 +23,11 @@ def not_found(error):
     return render_template('404.html'), 404
 
 
-# Import a module / component using its blueprint handler variable (mod_auth)
-from app.base.controllers import mod_auth as auth_module
+# Import a module / component using its blueprint handler variable
+from app.users.controllers import users as users_module
 
 # Register blueprint(s)
-app.register_blueprint(auth_module)
+app.register_blueprint(users_module)
 # app.register_blueprint(xyz_module)
 # ..
 

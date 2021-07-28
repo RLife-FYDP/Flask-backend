@@ -2,14 +2,15 @@ import random
 
 from faker import Faker
 
-from app.base.models import *
+from app.models import *
 
 faker = Faker()
 
 db.drop_all()
 db.create_all()
 
-num_suites = 5
+SIZE_FACTOR = 1
+num_suites = 5 * SIZE_FACTOR
 for i in range(num_suites):
     location = SuiteLocation(
         latitude=faker.latitude(),
@@ -40,7 +41,7 @@ for i in range(num_suites):
 
     db.session.add(suite)
 
-for i in range(10):
+for i in range(10 * SIZE_FACTOR):
     location = UserLocation(
         latitude=faker.latitude(),
         longitude=faker.longitude(),
@@ -71,7 +72,7 @@ for i in range(10):
 
     db.session.add(user)
 
-for i in range(5):
+for i in range(5 * SIZE_FACTOR):
     messages = []
     for _ in range(3):
         messages.append(TaskMessage(
@@ -100,7 +101,7 @@ for task in tasks:
             Assignment(user=users[i], task=task, completed_at=faker.date() if bool(random.getrandbits(1)) else None)
         )
 
-for _ in range(5):
+for _ in range(5 * SIZE_FACTOR):
     expense_item = ExpenseItem(
         total_amount=random.randrange(1, 1000),
         paid_by_id=random.choice(users).id,

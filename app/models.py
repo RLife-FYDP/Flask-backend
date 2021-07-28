@@ -1,12 +1,11 @@
-from app import db
+from app import db, ma
 
 
 class Base(db.Model):
     __abstract__ = True
 
-    id = db.Column(db.Integer, primary_key=True)
-    created_on = db.Column(db.DateTime, default=db.func.current_timestamp())
-    updated_on = db.Column(db.DateTime, default=db.func.current_timestamp(),
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(),
                            onupdate=db.func.current_timestamp())
 
 
@@ -30,9 +29,6 @@ class User(Base):
     tasks = db.relationship("Task", secondary="assignments", viewonly=True)
     expense_items = db.relationship("ExpenseItem", secondary="user_expenses", viewonly=True)
 
-    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
-
 
 class Location(Base):
     __tablename__ = 'locations'
@@ -40,9 +36,6 @@ class Location(Base):
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
     type = db.Column(db.String(20))
-
-    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': 'location',
@@ -73,9 +66,6 @@ class Setting(Base):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
-
 
 class Suite(Base):
     __tablename__ = 'suites'
@@ -87,18 +77,12 @@ class Suite(Base):
     messages = db.relationship('SuiteMessage', backref='suite', lazy=True)
     location = db.relationship('SuiteLocation', backref='suite', lazy=True, uselist=False)
 
-    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
-
 
 class Message(Base):
     __tablename__ = 'messages'
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(20))
-
-    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': 'message',
@@ -131,9 +115,6 @@ class Assignment(Base):
     task = db.relationship('Task', backref='assignments')
     user = db.relationship('User', backref='assignments')
 
-    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
-
 
 class Task(Base):
     __tablename__ = 'tasks'
@@ -150,9 +131,6 @@ class Task(Base):
     messages = db.relationship('TaskMessage', backref='task', lazy=True)
     users = db.relationship("User", secondary="assignments", viewonly=True)
 
-    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
-
 
 class ExpenseItem(Base):
     __tablename__ = 'expense_items'
@@ -162,9 +140,6 @@ class ExpenseItem(Base):
     paid_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     users = db.relationship("User", secondary="user_expenses", viewonly=True)
-
-    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
 
 
 class UserExpense(Base):
@@ -177,5 +152,73 @@ class UserExpense(Base):
     expense_item = db.relationship('ExpenseItem', backref='user_expenses')
     user = db.relationship('User', backref='user_expenses')
 
-    created_on = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now(), nullable=False)
+
+class LocationSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Location
+
+
+class SuiteSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = SuiteLocation
+
+
+class UserLocationSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = UserLocation
+
+
+class SettingSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Setting
+
+
+class SuiteSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Suite
+
+
+class MessageSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Message
+
+
+class SuiteMessageSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = SuiteMessage
+
+
+class TaskMessageSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = TaskMessage
+
+
+class AssignmentSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Assignment
+
+
+class TaskSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Task
+
+
+class ExpenseItemSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = ExpenseItem
+
+
+class UserExpenseSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = UserExpense
+
+
+class UserSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = User
+
+    location = ma.Nested(LocationSchema)
+    setting = ma.Nested(SettingSchema)
+    suite = ma.Nested(SuiteSchema)
+    tasks = ma.Nested(TaskSchema, many=True)
+    expense_items = ma.Nested(ExpenseItemSchema, many=True)
