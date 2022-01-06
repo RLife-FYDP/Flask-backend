@@ -2,7 +2,7 @@ from flask import Blueprint, json
 
 from app.models import Suite, SuiteSchema
 
-# Define the blueprint: 'users', set its url prefix: app.url/suites
+# Define the blueprint: 'suites', set its url prefix: app.url/suites
 suites = Blueprint('suites', __name__, url_prefix='/suites')
 
 
