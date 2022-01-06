@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.config.from_object('config')
 
 # Define the database object which is imported
-# by modules and controllers
+# by modules and controllers.py
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 

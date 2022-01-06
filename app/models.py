@@ -173,11 +173,6 @@ class SettingSchema(ma.SQLAlchemyAutoSchema):
         model = Setting
 
 
-class SuiteSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = Suite
-
-
 class MessageSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Message
@@ -198,19 +193,25 @@ class AssignmentSchema(ma.SQLAlchemyAutoSchema):
         model = Assignment
 
 
-class TaskSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = Task
-
-
 class ExpenseItemSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = ExpenseItem
+        include_fk = True
+
+    # paid_by_id = ma.Nested(lambda: UserSchema(only=["id"]))
 
 
 class UserExpenseSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = UserExpense
+
+
+class TaskSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Task
+
+    messages = ma.Nested(TaskMessageSchema, many=True)
+    # users = ma.Nested(lambda: UserSchema(only=["id"]), many=True)
 
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
@@ -222,3 +223,12 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     suite = ma.Nested(SuiteSchema)
     tasks = ma.Nested(TaskSchema, many=True)
     expense_items = ma.Nested(ExpenseItemSchema, many=True)
+
+
+class SuiteSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Suite
+
+    users = ma.Nested(UserSchema, many=True)
+    messages = ma.Nested(SuiteMessageSchema, many=True)
+    location = ma.Nested(LocationSchema)
