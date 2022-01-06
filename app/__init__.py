@@ -30,13 +30,8 @@ def default_page():
 
 
 from app.users.controllers import users as users_module
+from app.suites.controllers import suites as suites_module
 
 # Register blueprint(s)
 app.register_blueprint(users_module)
-print(app.url_map)
-# app.register_blueprint(xyz_module)
-# ..
-
-# Build the database:
-# This will create the database file using SQLAlchemy
-# db.create_all()
+app.register_blueprint(suites_module)
