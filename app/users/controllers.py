@@ -8,8 +8,7 @@ users = Blueprint('users', __name__, url_prefix='/users')
 
 @users.route('/')
 def get_all_users():
-    users = Us
-    er.query.all()
+    users = User.query.all()
     users_schema = UserSchema(many=True)
     return json.dumps(users_schema.dump(users))
 
