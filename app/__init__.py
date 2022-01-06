@@ -7,6 +7,8 @@ from flask_sqlalchemy import SQLAlchemy
 # Define the WSGI application object
 app = Flask(__name__)
 
+# Configs
+app.config.from_envvar('FLASK_CONFIG')
 
 # Define the database object which is imported
 # by modules and controllers.py
