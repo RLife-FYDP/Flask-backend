@@ -25,6 +25,7 @@
    ```
 
 4. Install requirements
+
    ```
    venv/bin/pip install -r requirements.txt
    ```
