@@ -1,19 +1,45 @@
 # Setup
 
 1. Run
-   `export FLASK_CONFIG="config.py"`
 
-2. Install `VirtualEnv` with `pip install virtualenv`
+   ```
+   export FLASK_CONFIG="config.py"
+   ```
 
-3. Create a VirtualEnv and use the virtual env `virtualenv venv` then `source venv/bin/activate`
+2. Install `VirtualEnv` with
 
-4. Install requirements `venv/bin/pip install -r requirements.txt`
+   ```
+   pip install virtualenv
+   ```
+
+3. Create a VirtualEnv and use the virtual env
+
+   ```
+   virtualenv venv
+   ```
+
+   then
+
+   ```
+   source venv/bin/activate
+   ```
+
+4. Install requirements
+   ```
+   venv/bin/pip install -r requirements.txt
+   ```
 
 To run seed file
-`venv/bin/python3 -m app.seed`
+
+```
+venv/bin/python3 -m app.seed
+```
 
 To run flask server
-`venv/bin/python3 -m app.run`
+
+```
+venv/bin/python3 -m app.run
+```
 
 # Database schema
 
