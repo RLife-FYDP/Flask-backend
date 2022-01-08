@@ -21,7 +21,7 @@ def get_user(id):
 
 
 @users.route('/<int:id>/tasks')
-def get_suite_tasks(id):
+def get_user_tasks(id):
     user = User.query.get(id)
     tasks = user.tasks
     task_schema = TaskSchema(many=True)
