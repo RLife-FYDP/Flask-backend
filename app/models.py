@@ -211,7 +211,7 @@ class TaskSchema(ma.SQLAlchemyAutoSchema):
         model = Task
 
     messages = ma.Nested(TaskMessageSchema, many=True)
-    # users = ma.Nested(lambda: UserSchema(only=["id"]), many=True)
+    users = ma.Nested(lambda: UserSchema(only=["id"]), many=True)
 
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
@@ -221,7 +221,6 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     location = ma.Nested(LocationSchema)
     setting = ma.Nested(SettingSchema)
     suite = ma.Nested(SuiteSchema)
-    tasks = ma.Nested(TaskSchema, many=True)
     expense_items = ma.Nested(ExpenseItemSchema, many=True)
 
 
