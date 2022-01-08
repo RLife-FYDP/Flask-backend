@@ -1,5 +1,7 @@
 # Setup
 
+Make sure you're running Python version >= 3.7
+
 1. Run
 
    ```

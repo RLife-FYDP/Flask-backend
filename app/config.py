@@ -1,6 +1,7 @@
 # Statement for enabling the development environment
 DEBUG = True
-SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:@localhost/FYPD'
+DATABASE_PASSWORD = 'ceef9ffe'
+SQLALCHEMY_DATABASE_URI = f'mysql://b1af419355f3a4:{DATABASE_PASSWORD}@us-cdbr-east-05.cleardb.net/heroku_dc2cd1ae84a7237'
 DATABASE_CONNECT_OPTIONS = {}
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 

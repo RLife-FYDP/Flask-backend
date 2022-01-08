@@ -67,7 +67,7 @@ for i in range(10 * SIZE_FACTOR):
         rating=random.randrange(1, 10),
         location=location,
         setting=setting,
-        suite_id=i % num_suites + 1
+        suite_id=(i % num_suites)*10 + 4 # the suite_id's are generated like 4, 14, 24, etc.
     )
 
     db.session.add(user)
