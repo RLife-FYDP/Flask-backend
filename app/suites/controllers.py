@@ -1,4 +1,4 @@
-from flask import Blueprint, json, jsonify
+from flask import Blueprint, jsonify
 
 from app.models import Suite, Task, SuiteSchema, TaskSchema, Assignment
 
@@ -10,7 +10,7 @@ suites = Blueprint('suites', __name__, url_prefix='/suites')
 def get_all_suites():
     suites = Suite.query.all()
     suites_schema = SuiteSchema(many=True)
-    return jsonify(json.dumps(suites_schema.dump(suites)))
+    return jsonify(suites_schema.dump(suites))
 
 
 @suites.route('/<int:id>')
@@ -27,4 +27,4 @@ def get_suite_tasks(id):
     unique_task_ids = {assignment.task_id for assignment in assignments}
     tasks = Task.query.filter(Task.id.in_(unique_task_ids)).all()
     task_schema = TaskSchema(many=True)
-    return jsonify(json.dumps(task_schema.dump(tasks)))
+    return jsonify(task_schema.dump(tasks))
