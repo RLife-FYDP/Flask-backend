@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 
-from app.models import Suite, Task, SuiteSchema, TaskSchema, Assignment
+from app.models import Suite, Task, SuiteSchema, TaskSchema, Assignment, UserSchema
 
 # Define the blueprint: 'suites', set its url prefix: app.url/suites
 suites = Blueprint('suites', __name__, url_prefix='/suites')
@@ -28,3 +28,10 @@ def get_suite_tasks(id):
     tasks = Task.query.filter(Task.id.in_(unique_task_ids)).all()
     task_schema = TaskSchema(many=True)
     return jsonify(task_schema.dump(tasks))
+
+
+@suites.route('/<int:id>/users')
+def get_suite_users(id):
+    suite = Suite.query.get(id)
+    user_schema = UserSchema(many=True)
+    return jsonify(user_schema.dump(suite.users))

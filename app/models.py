@@ -228,6 +228,5 @@ class SuiteSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Suite
 
-    users = ma.Nested(UserSchema, many=True)
     messages = ma.Nested(SuiteMessageSchema, many=True)
     location = ma.Nested(LocationSchema)
