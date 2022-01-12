@@ -1,3 +1,7 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 # Statement for enabling the development environment
 DEBUG = True
 DATABASE_PASSWORD = 'ceef9ffe'
@@ -19,4 +23,5 @@ CSRF_ENABLED = True
 CSRF_SESSION_KEY = "secret"
 
 # Secret key for signing cookies
-SECRET_KEY = "secret"
+ACCESS_TOKEN_SECRET = os.environ.get("ACCESS_TOKEN_SECRET") if os.environ.get("ACCESS_TOKEN_SECRET") is not None else "access_token_development_secret"
+REFRESH_TOKEN_SECRET = os.environ.get("REFRESH_TOKEN_SECRET") if os.environ.get("REFRESH_TOKEN_SECRET") is not None else "access_token_development_secret"
