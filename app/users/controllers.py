@@ -9,14 +9,14 @@ users = Blueprint('users', __name__, url_prefix='/users')
 @users.route('/')
 def get_all_users():
     users = User.query.all()
-    users_schema = UserSchema(many=True)
+    users_schema = UserSchema(many=True, exclude=['password_digest'])
     return jsonify(users_schema.dump(users))
 
 
 @users.route('/<int:id>')
 def get_user(id):
     user = User.query.get(id)
-    user_schema = UserSchema()
+    user_schema = UserSchema(exclude=['password_digest'])
     return jsonify(user_schema.dump(user))
 
 
