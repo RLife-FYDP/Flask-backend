@@ -18,5 +18,8 @@ def create_refresh_token(payload: object):
   payload['exp'] = datetime.datetime.now() + datetime.timedelta(days=365)
   return jwt.encode(payload, REFRESH_TOKEN_SECRET)
 
+def decode_access_token(token: str):
+  return jwt.decode(token, ACCESS_TOKEN_SECRET, "HS256")
+
 def decode_refresh_token(token: str):
   return jwt.decode(token, REFRESH_TOKEN_SECRET, "HS256")
