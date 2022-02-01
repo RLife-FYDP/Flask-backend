@@ -51,6 +51,7 @@ def create_user():
     gender=user_data['gender'],
     password_digest=password_digest,
     rating=-1,
+    suite_id=4 # TODO: so troll dump all the new boys in suite 4 so they at least have a suite so we can test the app
   )
   db.session.add(user)
   db.session.commit()
