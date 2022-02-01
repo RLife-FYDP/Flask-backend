@@ -11,8 +11,8 @@ def authorize(f):
       abort(401)
 
     user = None
-    data = request.headers['Authorization'].encode('ascii','ignore')
-    token = str.replace(str(data), 'Bearer ','')
+    data = request.headers['Authorization']
+    token = data.replace('Bearer ', '')
     try:
       decoded_token = decode_access_token(token)
       user = User.query.get(decoded_token['user_id'])

@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify
+from app.auth.middleware import authorize
 
 from app.models import Suite, Task, SuiteSchema, TaskSchema, Assignment, UserSchema
 
@@ -21,7 +22,8 @@ def get_suite(id):
 
 
 @suites.route('/<int:id>/tasks')
-def get_suite_tasks(id):
+@authorize
+def get_suite_tasks(user, id):
     suite = Suite.query.get(id)
     assignments = Assignment.query.filter(Assignment.user_id.in_([user.id for user in suite.users])).all()
     unique_task_ids = {assignment.task_id for assignment in assignments}
