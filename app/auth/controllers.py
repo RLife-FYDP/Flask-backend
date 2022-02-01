@@ -44,8 +44,8 @@ def create_user():
 
   # create user in database
   user = User(
-    first_name=user_data['last_name'],
-    last_name=user_data['first_name'],
+    first_name=user_data['first_name'],
+    last_name=user_data['last_name'],
     email=user_data['email'],
     age=user_data['age'],
     gender=user_data['gender'],
