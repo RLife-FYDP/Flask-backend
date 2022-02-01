@@ -34,8 +34,10 @@ def default_page():
 from app.users.controllers import users as users_module
 from app.suites.controllers import suites as suites_module
 from app.auth.controllers import auth as auth_module
+from app.tasks.controllers import tasks as tasks_module
 
 # Register blueprint(s)
 app.register_blueprint(users_module)
 app.register_blueprint(suites_module)
 app.register_blueprint(auth_module)
+app.register_blueprint(tasks_module)
