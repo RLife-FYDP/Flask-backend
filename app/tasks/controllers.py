@@ -14,7 +14,7 @@ task_schema = TaskSchema()
 
 @tasks.route('create', methods=['POST'])
 @authorize
-def create_tasks():
+def create_tasks(user):
     json_data = request.get_json()
     try:
         task_data = task_schema.load(json_data)
@@ -42,7 +42,7 @@ def create_tasks():
 
 @tasks.route('/<int:id>', methods=['PUT'])
 @authorize
-def update_task(id):
+def update_task(user,id):
     try:
         task_data = task_schema.load(request.get_json())
     except ValidationError as err:
