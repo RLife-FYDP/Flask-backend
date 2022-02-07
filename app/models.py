@@ -1,4 +1,5 @@
 from app import db, ma
+from marshmallow import Schema, fields, ValidationError, validate, ValidationError
 
 
 class Base(db.Model):
@@ -121,12 +122,11 @@ class Task(Base):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255), nullable=False)
-    priority = db.Column(db.Integer, nullable=False)
-    completed = db.Column(db.Boolean, nullable=False)
-    tags = db.Column(db.String(255), nullable=False)
     points = db.Column(db.Integer, nullable=False)
-    start_time = db.Column(db.DateTime, nullable=False)
-    due_date = db.Column(db.DateTime, nullable=False)
+    tags = db.Column(db.String(255), nullable=True)
+    start_time = db.Column(db.DateTime, nullable=True)
+    last_completed = db.Column(db.DateTime, nullable=True)
+    rrule_option = db.Column(db.String(255), nullable=True)
 
     messages = db.relationship('TaskMessage', backref='task', lazy=True)
     users = db.relationship("User", secondary="assignments", viewonly=True)
@@ -209,6 +209,15 @@ class UserExpenseSchema(ma.SQLAlchemyAutoSchema):
 class TaskSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Task
+
+    title = fields.String()
+    points = fields.Int(validate=[validate.Range(min=0)])
+    tags = fields.String()
+    description = fields.String()
+    startTime = fields.DateTime()
+    lastCompleted = fields.DateTime()
+    rruleOption = fields.String()
+    assignee = fields.List(fields.Int)
 
     messages = ma.Nested(TaskMessageSchema, many=True)
     users = ma.Nested(lambda: UserSchema(only=["id"]), many=True)

@@ -58,16 +58,16 @@ for i in range(10 * SIZE_FACTOR):
     user = User(
         first_name=faker.first_name(),
         last_name=faker.last_name(),
-        email=faker.ascii_email(),
+        email=faker.ascii_email() if i != 0 else 'tyler1@gmail.com',
         age=random.randrange(18, 30),
         profile_img_link=faker.image_url(),
         gender="Male" if i % 2 == 0 else "Female",
         birthday=faker.date_of_birth(),
-        password_digest=faker.password(length=255),
+        password_digest="$2b$12$nVLkz8wKCwT6tVBjhc7JxOSFwtHjHiuEhsxun4E.aQFC7n.YkwAoa",  # password,
         rating=random.randrange(1, 10),
         location=location,
         setting=setting,
-        suite_id=(i % num_suites)*10 + 4 # the suite_id's are generated like 4, 14, 24, etc.
+        suite_id=(i % num_suites) * 10 + 4  # the suite_id's are generated like 4, 14, 24, etc.
     )
 
     db.session.add(user)
@@ -82,12 +82,11 @@ for i in range(5 * SIZE_FACTOR):
     task = Task(
         title=faker.text(max_nb_chars=random.randrange(10, 20)),
         description=faker.text(max_nb_chars=random.randrange(20, 50)),
-        priority=random.randrange(1, 10),
-        completed=faker.boolean(),
         tags=faker.text(max_nb_chars=random.randrange(5, 15)),
         points=random.randrange(1, 10),
         start_time=faker.date(),
-        due_date=faker.date(),
+        last_completed=faker.date(),
+        rrule_option="RRULE:FREQ=WEEKLY;INTERVAL=1;UNTIL=20220407T040000Z;BYDAY=TU,TH,SA",
         messages=messages,
     )
 
