@@ -13,6 +13,7 @@ tasks = Blueprint('tasks', __name__, url_prefix='/tasks')
 task_schema = TaskSchema()
 
 @tasks.route('create', methods=['POST'])
+@authorize
 def create_tasks():
     json_data = request.get_json()
     try:
@@ -40,6 +41,7 @@ def create_tasks():
 
 
 @tasks.route('/<int:id>', methods=['PUT'])
+@authorize
 def update_task(id):
     try:
         task_data = task_schema.load(request.get_json())
