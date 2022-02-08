@@ -28,7 +28,7 @@ def create_tasks(user):
         points=task_data['points'],
         start_time=task_data.get('startTime', datetime.datetime.now()),
         last_completed=task_data.get('lastCompleted'),
-        rrule_option=task_data.get('rrule_option'),
+        rrule_option=task_data.get('rruleOption'),
     )
     for user_id in task_data['assignee']:
         user = User.query.get(user_id)
