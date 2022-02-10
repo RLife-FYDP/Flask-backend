@@ -28,7 +28,7 @@ def create_expense(user):
         user_id, owe_amount = item['id'], item['amount']
         user = User.query.get(user_id)
         expense_item.user_expenses.append(
-            UserExpense(user=user, expense_item=expense_item, amount=owe_amount, paid_at=None)
+            UserExpense(user=user, expense_items=expense_item, amount=owe_amount, paid_at=None)
         )
 
     db.session.add(expense_item)
