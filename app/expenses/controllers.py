@@ -21,6 +21,7 @@ def create_expense(user):
     expense_item = ExpenseItem(
         total_amount=expense_data['totalAmount'],
         paid_by_id=expense_data['paidById'],
+        description=expense_data['description'],
         receipt_img_link=expense_data['receiptImgLink']
     )
     for item in expense_data['userOwe']:
@@ -29,7 +30,6 @@ def create_expense(user):
         expense_item.user_expenses.append(
             UserExpense(user=user, expense_item=expense_item, amount=owe_amount, paid_at=None)
         )
-
 
     db.session.add(expense_item)
     db.session.commit()
@@ -46,16 +46,3 @@ def update_task(user, id):
         return jsonify(expense_item=user_expense_schema.dump(user_expense))
     except Exception as err:
         return {"message": "Error updating", "errors": str(err)}, 400
-
-
-#
-# @expenses.route('/<int:id>', methods=['DELETE'])
-# @authorize
-# def delete_task(user, id):
-#     task = Task.query.get_or_404(id)
-#     try:
-#         db.session.delete(task)
-#         db.session.commit()
-#         return {"message": f"task {id} deleted"}, 200
-#     except Exception as err:
-#         return {"message": f"Error delete record {id}", "errors": str(err)}, 500

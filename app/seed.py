@@ -104,6 +104,7 @@ for _ in range(5 * SIZE_FACTOR):
     expense_item = ExpenseItem(
         total_amount=random.randrange(1, 1000),
         paid_by_id=random.choice(users).id,
+        description=faker.text(),
         receipt_img_link=faker.image_url(),
     )
 

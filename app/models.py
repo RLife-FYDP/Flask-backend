@@ -136,6 +136,7 @@ class ExpenseItem(Base):
     __tablename__ = 'expense_items'
     id = db.Column(db.Integer, primary_key=True)
     total_amount = db.Column(db.Float, nullable=False)
+    description = db.Column(db.String(255))
     receipt_img_link = db.Column(db.String(255))
     paid_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
