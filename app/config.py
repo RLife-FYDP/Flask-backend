@@ -1,11 +1,10 @@
 import os
-from dotenv import load_dotenv
-load_dotenv()
 
 # Statement for enabling the development environment
 DEBUG = True
-DATABASE_PASSWORD = 'ceef9ffe'
-SQLALCHEMY_DATABASE_URI = f'mysql://b1af419355f3a4:{DATABASE_PASSWORD}@us-cdbr-east-05.cleardb.net/heroku_dc2cd1ae84a7237'
+DATABASE_PASSWORD = os.environ.get('DATABASE_PASSWORD')
+SQLALCHEMY_DATABASE_URI = f'mysql://admin:{DATABASE_PASSWORD}@database-1.cph7qam3uoxb.us-east-1.rds.amazonaws.com/rlife'
+print(SQLALCHEMY_DATABASE_URI)
 DATABASE_CONNECT_OPTIONS = {}
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ENGINE_OPTIONS = { "pool_pre_ping": True, "pool_recycle": 300 }

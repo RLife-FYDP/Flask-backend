@@ -67,7 +67,7 @@ for i in range(10 * SIZE_FACTOR):
         rating=random.randrange(1, 10),
         location=location,
         setting=setting,
-        suite_id=(i % num_suites) * 10 + 4  # the suite_id's are generated like 4, 14, 24, etc.
+        suite_id=i % num_suites + 1
     )
 
     db.session.add(user)
@@ -114,7 +114,7 @@ for expense_item in expense_items:
     for i in range(random.randrange(len(users))):
         expense_item.user_expenses.append(
             UserExpense(
-                user=users[i], expense_item=expense_item, amount=random.randrange(1, expense_item.total_amount),
+                user=users[i], expense_item=expense_item, amount=random.randrange(1, max(2, expense_item.total_amount)),
                 paid_at=faker.date() if bool(random.getrandbits(1)) else None
             )
         )
