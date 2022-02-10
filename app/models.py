@@ -135,7 +135,7 @@ class Task(Base):
 class ExpenseItem(Base):
     __tablename__ = 'expense_items'
     id = db.Column(db.Integer, primary_key=True)
-    total_amount = db.Column(db.Integer, nullable=False)
+    total_amount = db.Column(db.Float, nullable=False)
     receipt_img_link = db.Column(db.String(255))
     paid_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
@@ -146,7 +146,7 @@ class UserExpense(Base):
     __tablename__ = 'user_expenses'
     expense_item_id = db.Column(db.Integer, db.ForeignKey('expense_items.id'), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    amount = db.Column(db.Integer, nullable=False)
+    amount = db.Column(db.Float, nullable=False)
     paid_at = db.Column(db.DateTime)
 
     expense_item = db.relationship('ExpenseItem', backref='user_expenses')
@@ -198,12 +198,21 @@ class ExpenseItemSchema(ma.SQLAlchemyAutoSchema):
         model = ExpenseItem
         include_fk = True
 
-    # paid_by_id = ma.Nested(lambda: UserSchema(only=["id"]))
+    totalAmount = fields.Float()
+    paidByID = fields.Int()
+    receiptImgLink = fields.String()
+    userOwe = fields.List(fields.Dict(keys=fields.Str(), values=fields.Float()))
 
+    users = ma.Nested(lambda: UserSchema(only=["id"]), many=True)
 
 class UserExpenseSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = UserExpense
+
+    expense_item_id = fields.Int()
+    user_id = fields.Int()
+    amount = fields.Float()
+    paid_at = fields.DateTime()
 
 
 class TaskSchema(ma.SQLAlchemyAutoSchema):
