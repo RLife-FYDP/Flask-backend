@@ -113,22 +113,22 @@ class Assignment(Base):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     completed_at = db.Column(db.DateTime)
 
-    task = db.relationship('Task', backref='assignments')
     user = db.relationship('User', backref='assignments')
 
 
 class Task(Base):
     __tablename__ = 'tasks'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.String(255), nullable=False)
-    points = db.Column(db.Integer, nullable=False)
+    title = db.Column(db.String(255), nullable=True)
+    description = db.Column(db.String(255), nullable=True)
+    points = db.Column(db.Integer, nullable=True)
     tags = db.Column(db.String(255), nullable=True)
     start_time = db.Column(db.DateTime, nullable=True)
     last_completed = db.Column(db.DateTime, nullable=True)
     rrule_option = db.Column(db.String(255), nullable=True)
 
-    messages = db.relationship('TaskMessage', backref='task', lazy=True)
+    messages = db.relationship('TaskMessage', backref='task', lazy=True, cascade="all, delete")
+    assignments = db.relationship('Assignment', backref='task', cascade="all, delete")
     users = db.relationship("User", secondary="assignments", viewonly=True)
 
 

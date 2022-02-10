@@ -12,6 +12,7 @@ tasks = Blueprint('tasks', __name__, url_prefix='/tasks')
 
 task_schema = TaskSchema()
 
+
 @tasks.route('create', methods=['POST'])
 @authorize
 def create_tasks(user):
@@ -42,7 +43,7 @@ def create_tasks(user):
 
 @tasks.route('/<int:id>', methods=['PUT'])
 @authorize
-def update_task(user,id):
+def update_task(user, id):
     try:
         task_data = task_schema.load(request.get_json())
     except ValidationError as err:
@@ -61,3 +62,15 @@ def update_task(user,id):
         return task_data
     except Exception as err:
         return {"message": "Error updating", "errors": str(err)}, 400
+
+
+@tasks.route('/<int:id>', methods=['DELETE'])
+# @authorize
+def delete_task(id):
+    task = Task.query.get_or_404(id)
+    try:
+        db.session.delete(task)
+        db.session.commit()
+        return {"message": f"task {id} deleted"}, 200
+    except Exception as err:
+        return {"message": f"Error delete record {id}", "errors": str(err)}, 500
