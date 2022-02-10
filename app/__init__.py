@@ -4,13 +4,16 @@ from flask_cors import CORS
 from flask_marshmallow import Marshmallow
 # Import SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
+import os
+from dotenv import load_dotenv
+load_dotenv('./app/.env')
 
 # Define the WSGI application object
 app = Flask(__name__)
 CORS(app)
 
 # Configs
-app.config.from_envvar('FLASK_CONFIG')
+app.config.from_pyfile(os.environ.get('FLASK_CONFIG'))
 
 # Define the database object which is imported
 # by modules and controllers.py

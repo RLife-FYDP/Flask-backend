@@ -2,11 +2,13 @@
 
 Make sure you're running Python version >= 3.7
 
-1. Run
+1. Create env file
 
    ```
-   export FLASK_CONFIG="config.py"
+   cp ./app/.env.example ./app/.env
    ```
+
+   Ask someone for the `DATABASE_PASSWORD`
 
 2. Install `VirtualEnv` with
 
