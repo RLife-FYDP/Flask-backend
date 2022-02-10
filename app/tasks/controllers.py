@@ -65,8 +65,8 @@ def update_task(user, id):
 
 
 @tasks.route('/<int:id>', methods=['DELETE'])
-# @authorize
-def delete_task(id):
+@authorize
+def delete_task(user, id):
     task = Task.query.get_or_404(id)
     try:
         db.session.delete(task)
