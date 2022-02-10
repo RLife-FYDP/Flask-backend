@@ -46,3 +46,15 @@ def update_task(user, id):
         return jsonify(expense_item=user_expense_schema.dump(user_expense))
     except Exception as err:
         return {"message": "Error updating", "errors": str(err)}, 400
+
+
+@expenses.route('/<int:id>', methods=['DELETE'])
+@authorize
+def delete_task(user,id):
+    expenseItem = ExpenseItem.query.get_or_404(id)
+    try:
+        db.session.delete(expenseItem)
+        db.session.commit()
+        return {"message": f"expense {id} deleted"}, 200
+    except Exception as err:
+        return {"message": f"Error delete record {id}", "errors": str(err)}, 500

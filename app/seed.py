@@ -115,7 +115,7 @@ for expense_item in expense_items:
     for i in range(random.randrange(len(users))):
         expense_item.user_expenses.append(
             UserExpense(
-                user=users[i], expense_item=expense_item, amount=random.randrange(1, expense_item.total_amount),
+                user=users[i], expense_items=expense_item, amount=random.randrange(1, expense_item.total_amount),
                 paid_at=faker.date() if bool(random.getrandbits(1)) else None
             )
         )

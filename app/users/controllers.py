@@ -36,7 +36,7 @@ def get_user_expenses(user):
     res = []
     user_expenses = UserExpense.query.filter_by(user_id=user.id).all()
     for user_expense in user_expenses:
-        expense_item = ExpenseItem.query.get(user_expense.expense_item_id)
+        expense_item = user_expense.expense_items
         res.append({
             "amount_owe": user_expense.amount,
             "paid_at": user_expense.paid_at,

@@ -140,6 +140,7 @@ class ExpenseItem(Base):
     receipt_img_link = db.Column(db.String(255))
     paid_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
+    user_expenses = db.relationship('UserExpense', backref='expense_items', cascade="all, delete")
     users = db.relationship("User", secondary="user_expenses", viewonly=True)
 
 
@@ -150,7 +151,6 @@ class UserExpense(Base):
     amount = db.Column(db.Float, nullable=False)
     paid_at = db.Column(db.DateTime)
 
-    expense_item = db.relationship('ExpenseItem', backref='user_expenses')
     user = db.relationship('User', backref='user_expenses')
 
 
