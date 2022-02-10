@@ -15,6 +15,8 @@ SQLALCHEMY_ENGINE_OPTIONS = { "pool_pre_ping": True, "pool_recycle": 300 }
 # operations using the other.
 THREADS_PER_PAGE = 2
 
+MAX_CONTENT_LENGTH = 5 * 1000 * 1000 # 5 megabytes
+
 # Enable protection against *Cross-site Request Forgery (CSRF)*
 CSRF_ENABLED = True
 
