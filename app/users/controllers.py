@@ -43,6 +43,7 @@ def get_user_expenses(user):
             "expense_item_description": expense_item.description,
             "expense_item_total_amount": expense_item.total_amount,
             "expense_item_paid_by_user_id": expense_item.paid_by_id,
+            "expense_item_id": expense_item.id,
             "expense_receipt_url": expense_item.receipt_img_link,
             "expense_created_at": expense_item.created_at,
         })
