@@ -50,7 +50,7 @@ def update_task(user, id):
 
 @expenses.route('/<int:id>', methods=['DELETE'])
 @authorize
-def delete_task(user,id):
+def delete_expense(user, id):
     expenseItem = ExpenseItem.query.get_or_404(id)
     try:
         db.session.delete(expenseItem)
@@ -58,3 +58,26 @@ def delete_task(user,id):
         return {"message": f"expense {id} deleted"}, 200
     except Exception as err:
         return {"message": f"Error delete record {id}", "errors": str(err)}, 500
+
+
+@expenses.route('/<int:id>', methods=['GET'])
+@authorize
+def get_expense(user, id):
+    expense_item = ExpenseItem.query.get_or_404(id)
+    user_expenses = expense_item.user_expenses
+    u_expense = []
+    for user_expense in user_expenses:
+        u_expense.append({
+            "amount_owe": user_expense.amount,
+            "paid_at": user_expense.paid_at,
+            "user_id": user_expense.user_id,
+        })
+    return {
+        "expense_item_description": expense_item.description,
+        "expense_item_total_amount": expense_item.total_amount,
+        "expense_item_paid_by_user_id": expense_item.paid_by_id,
+        "expense_item_id": expense_item.id,
+        "expense_receipt_url": expense_item.receipt_img_link,
+        "expense_created_at": expense_item.created_at,
+        "user_expenses": u_expense
+    }
