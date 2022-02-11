@@ -92,8 +92,8 @@ def update_expense(user, id):
     expense_item.receipt_img_link = expense_data['receiptImgLink']
     expense_item.paid_by_id = expense_data['paidById']
     expense_item.updated_at = datetime.datetime.now()
-    for user_expense_data in expense_data['user_expenses']:
-        user_expense = UserExpense.query.get((id, user_expense_data['user_id']))
+    for user_expense_data in expense_data['userExpenses']:
+        user_expense = UserExpense.query.get((id, user_expense_data['userId']))
         user_expense.amount = user_expense_data['amount']
         user_expense.paid_at = user_expense_data['paidAt']
     try:
