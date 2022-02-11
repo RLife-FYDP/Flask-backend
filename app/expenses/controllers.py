@@ -87,15 +87,15 @@ def get_expense(user, id):
 def update_expense(user, id):
     expense_data = request.get_json()
     expense_item = ExpenseItem.query.get_or_404(id)
-    expense_item.total_amount = expense_data['total_amount']
+    expense_item.total_amount = expense_data['totalAmount']
     expense_item.description = expense_data['description']
-    expense_item.receipt_img_link = expense_data['receipt_img_link']
-    expense_item.paid_by_id = expense_data['paid_by_id']
+    expense_item.receipt_img_link = expense_data['receiptImgLink']
+    expense_item.paid_by_id = expense_data['paidById']
     expense_item.updated_at = datetime.datetime.now()
     for user_expense_data in expense_data['user_expenses']:
         user_expense = UserExpense.query.get((id, user_expense_data['user_id']))
-        user_expense.amount = user_expense_data['amount_owe']
-        user_expense.paid_at = user_expense_data['paid_at']
+        user_expense.amount = user_expense_data['amount']
+        user_expense.paid_at = user_expense_data['paidAt']
     try:
         db.session.commit()
         return {"message": f"Updated expenses id {id}"}, 200
