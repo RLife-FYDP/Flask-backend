@@ -1,5 +1,8 @@
-from flask import Blueprint, jsonify
+import datetime
+
+from flask import Blueprint, jsonify, request
 from app.auth.middleware import authorize
+from app import db
 
 from app.models import Suite, Task, SuiteSchema, TaskSchema, Assignment, UserSchema
 
@@ -37,3 +40,17 @@ def get_suite_users(id):
     suite = Suite.query.get(id)
     user_schema = UserSchema(many=True)
     return jsonify(user_schema.dump(suite.users))
+
+
+@suites.route('/<int:id>/update_canvas', methods=['PUT'])
+@authorize
+def update_canvas(user, id):
+    request_data = request.get_json()
+    suite = Suite.query.get(id)
+    suite.canvas = request_data['canvas']
+    suite.updated_at = datetime.datetime.now()
+    try:
+        db.session.commit()
+        return {"message": "updated canvas"}, 200
+    except Exception as err:
+        return {"message": "Error updating", "errors": str(err)}, 400
