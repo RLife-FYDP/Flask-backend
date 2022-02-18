@@ -19,8 +19,8 @@ def allowed_file(filename):
     filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @media.route('/image/upload', methods=['POST'])
-# @authorize
-def post_image():
+@authorize
+def post_image(_):
   if 'file' not in request.files:
     return {"message": "Missing file"}, 400
   file = request.files['file']
@@ -28,7 +28,8 @@ def post_image():
     return {"message": "No selected file"}, 400
   if not allowed_file(file.filename):
     return {"message": f'Invalid file extension. Valid extensions are: {ALLOWED_EXTENSIONS}'}, 400
-  extension = file.filename.rsplit('.', 1)[1].lower()
-  client.upload_fileobj(file, 'rlife', f'{str(datetime.now().timestamp())}.{extension}')
-  return {}, 200
+  extension = file.filename.split('.')[-1].lower()
+  ts = str(datetime.now().timestamp()).replace('.','-')
+  client.upload_fileobj(file, 'rlife', f'{ts}.{extension}', ExtraArgs={'ContentType': f'image/{extension}', 'ACL': 'public-read'})
+  return {'url': f'https://rlife.s3.us-east-1.amazonaws.com/{ts}.{extension}'}, 200
 
