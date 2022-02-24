@@ -4,6 +4,7 @@ from flask_cors import CORS
 from flask_marshmallow import Marshmallow
 # Import SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
+from flask_socketio import SocketIO
 
 # Define the WSGI application object
 app = Flask(__name__)
@@ -47,3 +48,5 @@ app.register_blueprint(tasks_module)
 app.register_blueprint(expenses_module)
 app.register_blueprint(media_module)
 app.register_blueprint(matches_module)
+
+socketio = SocketIO(app, cors_allowed_origins='*')

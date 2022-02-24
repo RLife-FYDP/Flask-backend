@@ -71,6 +71,7 @@ class Setting(Base):
 class Suite(Base):
     __tablename__ = 'suites'
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(225), nullable=False)
     active = db.Column(db.Boolean, nullable=False)
     canvas = db.Column(db.Text)
 
@@ -84,6 +85,7 @@ class Message(Base):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(20))
+    from_user = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': 'message',
@@ -182,6 +184,7 @@ class MessageSchema(ma.SQLAlchemyAutoSchema):
 class SuiteMessageSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = SuiteMessage
+    from_user = fields.Int()
 
 
 class TaskMessageSchema(ma.SQLAlchemyAutoSchema):

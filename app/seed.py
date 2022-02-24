@@ -140,17 +140,12 @@ for i in range(num_suites):
         longitude=faker.longitude(),
     )
 
-    messages = []
-    for _ in range(3):
-        messages.append(SuiteMessage(
-            content=faker.text(),
-        ))
-
     suite = Suite(
         active=faker.boolean(),
         canvas=CANVAS_BLOB,
         location=location,
-        messages=messages
+        name=faker.street_address(),
+        messages=[]
     )
 
     db.session.add(suite)
@@ -183,17 +178,10 @@ for i in range(4 * num_suites):
         setting=setting,
         suite_id=(i % num_suites) + 1
     )
-
     db.session.add(user)
 
 all_tasks = []
 for i in range(5 * num_suites):
-    messages = []
-    for _ in range(3):
-        messages.append(TaskMessage(
-            content=faker.text(),
-        ))
-
     task = Task(
         title=faker.text(max_nb_chars=random.randrange(10, 20)),
         description=faker.text(max_nb_chars=random.randrange(20, 50)),
@@ -202,7 +190,7 @@ for i in range(5 * num_suites):
         start_time=faker.date(),
         last_completed=faker.date(),
         rrule_option="RRULE:FREQ=WEEKLY;INTERVAL=1;UNTIL=20220407T040000Z;BYDAY=TU,TH,SA",
-        messages=messages,
+        messages=[],
     )
     all_tasks.append(task)
 
@@ -217,6 +205,12 @@ for suite in suites:
             task.assignments.append(
                 Assignment(user=users[i], task=task, completed_at=faker.date() if bool(random.getrandbits(1)) else None)
             )
+        task.messages.append(
+            TaskMessage(content=faker.text(), from_user=users[random.randint(0, len(users)-1)].id)
+        )
+        suite.messages.append(
+            SuiteMessage(content=faker.text(), from_user=users[random.randint(0, len(users)-1)].id)
+        )
 
 for suite in suites:
     users = suite.users

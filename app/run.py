@@ -1,3 +1,5 @@
-from app import app
+import app.chat.messaging_sockets
+from app import socketio, app
 
-app.run(host='localhost', port=8080, debug=True)
+
+socketio.run(app, host='localhost', port=8080, debug=True)
