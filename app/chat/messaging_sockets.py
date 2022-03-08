@@ -21,7 +21,20 @@ def handle_send_message(data):
   )
   db.session.add(message)
   db.session.commit()
-  print('sent message')
-  print(from_user_id)
   emit('emit_message', suite_message_schema.dump(message), room=str(room))
+
+@socketio.on('send_dm_message')
+def handle_send_dm_message(data):
+  print(data)
+  from_user_id = data['from']
+  to_user_id = data['to']
+  room = data['suite_id']
+  encrypted_message = data['encrypted_message']
+  message = {
+    'from_user':from_user_id,
+    'to_user': to_user_id,
+    'encrypted_message':encrypted_message,
+    'suite_id':room
+  }
+  emit('emit_dm_message', message, room=str(room))
 

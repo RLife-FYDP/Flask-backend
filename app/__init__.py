@@ -39,6 +39,7 @@ from app.tasks.controllers import tasks as tasks_module
 from app.expenses.controllers import expenses as expenses_module
 from app.media.controllers import media as media_module
 from app.matches.matching import matches as matches_module
+from app.chat.controllers import signal as signal_module
 
 # Register blueprint(s)
 app.register_blueprint(users_module)
@@ -48,5 +49,6 @@ app.register_blueprint(tasks_module)
 app.register_blueprint(expenses_module)
 app.register_blueprint(media_module)
 app.register_blueprint(matches_module)
+app.register_blueprint(signal_module)
 
 socketio = SocketIO(app, cors_allowed_origins='*')
