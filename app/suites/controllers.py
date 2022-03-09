@@ -3,19 +3,46 @@ import datetime
 from flask import Blueprint, jsonify, request
 from app.auth.middleware import authorize
 from app import db
-
-from app.models import Suite, Task, SuiteSchema, TaskSchema, Assignment, UserSchema
+from app.utils.constants import CANVAS_BLOB
+from app.models import Suite, Task, SuiteSchema, TaskSchema, Assignment, User, UserSchema
 
 # Define the blueprint: 'suites', set its url prefix: app.url/suites
 suites = Blueprint('suites', __name__, url_prefix='/suites')
 
 
-@suites.route('/')
+@suites.route('/', methods=['GET'])
 def get_all_suites():
     suites = Suite.query.all()
     suites_schema = SuiteSchema(many=True)
     return jsonify(suites_schema.dump(suites))
 
+@suites.route('/create', methods=['POST'])
+@authorize
+def create_suite(user):
+    body = request.get_json()
+    print(body)
+    suite = Suite(
+        active=True,
+        canvas=CANVAS_BLOB,
+        name=body['name'],
+        address=body['address'],
+        messages=[]
+    )
+    db.session.add(suite)
+
+    # add users to suite
+    for roommate in body['users']:
+        if 'userId' in roommate:
+            user = User.query.get(roommate['userId'])
+            user.suite_id = suite.id
+        elif 'email' in roommate:
+            user = User.query.filter_by(email=roommate['email']).first()
+            if user != None:
+                user.suite_id = suite.id
+
+    db.session.commit()
+    suite_schema = SuiteSchema()
+    return jsonify(suite_schema.dump(suite))
 
 @suites.route('/<int:id>')
 def get_suite(id):

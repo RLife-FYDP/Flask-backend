@@ -74,6 +74,7 @@ class Suite(Base):
     name = db.Column(db.String(225), nullable=False)
     active = db.Column(db.Boolean, nullable=False)
     canvas = db.Column(db.Text)
+    address = db.Column(db.String(255))
 
     users = db.relationship('User', backref='suite', lazy=True)
     messages = db.relationship('SuiteMessage', backref='suite', lazy=True)

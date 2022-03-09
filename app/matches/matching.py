@@ -15,7 +15,7 @@ def getRating(id):
 def findMatches(id):
    rating = User.query.get(id).rating
    #get top 10 closest users from database 
-   topMatches = User.query.order_by(asc(User.rating-rating)).limit(10).all()
+   topMatches = User.query.order_by(asc(User.rating-rating)).limit(11).all()
    user_schema = UserSchema(many=True, exclude=['password_digest'])
-   return jsonify((user_schema.dump(topMatches)))
+   return jsonify((user_schema.dump(topMatches[1:])))
 
