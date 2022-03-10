@@ -129,7 +129,7 @@ class Task(Base):
     start_time = db.Column(db.DateTime, nullable=True)
     last_completed = db.Column(db.DateTime, nullable=True)
     rrule_option = db.Column(db.String(255), nullable=True)
-    is_completed = db.Column(db.Boolean, default=False)
+    is_completed = db.Column(db.Integer, default=0)
 
     messages = db.relationship('TaskMessage', backref='task', lazy=True, cascade="all, delete")
     assignments = db.relationship('Assignment', backref='task', cascade="all, delete")
@@ -235,8 +235,7 @@ class TaskSchema(ma.SQLAlchemyAutoSchema):
     lastCompleted = fields.DateTime(allow_none=True)
     rruleOption = fields.String()
     assignee = fields.List(fields.Int)
-    isCompleted = fields.Int()
-
+    isCompleted = fields.Int(validate=[validate.Range(min=0, max=1)])
     messages = ma.Nested(TaskMessageSchema, many=True)
     users = ma.Nested(lambda: UserSchema(only=["id"]), many=True)
 
