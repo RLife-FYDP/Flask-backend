@@ -54,7 +54,7 @@ def update_task(user, id):
     task.tags = task_data['tags'],
     task.points = task_data['points'],
     task.start_time = task_data['startTime']
-    task.last_completed = task_data['lastCompleted'],
+    task.last_completed = task_data.get('lastCompleted'),
     task.rrule_option = task_data['rruleOption'],
     task.updated_at = datetime.datetime.now()
     try:
