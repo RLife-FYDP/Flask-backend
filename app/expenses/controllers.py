@@ -22,7 +22,7 @@ def create_expense(user):
         total_amount=expense_data['totalAmount'],
         paid_by_id=expense_data['paidById'],
         description=expense_data['description'],
-        receipt_img_link=expense_data['receiptImgLink']
+        receipt_img_link=getattr(expense_data, 'receiptImgLink', "")
     )
     for item in expense_data['userOwe']:
         user_id, owe_amount = item['id'], item['amount']
