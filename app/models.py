@@ -21,7 +21,7 @@ class User(Base):
     gender = db.Column(db.String(255), nullable=False)
     birthday = db.Column(db.DateTime())
     password_digest = db.Column(db.String(255))
-    rating = db.Column(db.Integer, nullable=False)
+    rating = db.Column(db.Float, nullable=False)
 
     suite_id = db.Column(db.Integer, db.ForeignKey('suites.id'))
 

@@ -55,7 +55,7 @@ for i in range(4 * num_suites):
         gender="Male" if i % 2 == 0 else "Female",
         birthday=faker.date_of_birth(),
         password_digest="$2b$12$nVLkz8wKCwT6tVBjhc7JxOSFwtHjHiuEhsxun4E.aQFC7n.YkwAoa",  # password,
-        rating=random.randrange(1, 10),
+        rating=random.uniform(0, 1),
         location=location,
         setting=setting,
         suite_id=(i % num_suites) + 1
