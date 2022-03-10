@@ -1,8 +1,9 @@
 from datetime import datetime
+from statistics import mean
 from typing import List
 
 from sqlalchemy import and_
-from app.models import ExpenseItem, User, Task, Assignment, Suite
+from app.models import ExpenseItem, PeerRating, User, Task, Assignment, Suite
 from app import db
 
 
@@ -15,7 +16,7 @@ def main():
       M_ts = calculate_task_share(user, suite)
       M_es = calculate_expense_share(user, suite)
       M_dr = calculate_deadline_reliability(user)
-      M_pr = calculate_peer_rating_metric(user)
+      M_pr = calculate_peer_rating_metric(user, suite)
       room_rating = .33*M_ts + .33*M_dr + .22*M_es + .12*M_pr
     print(f'---{user.email}')
     print(f'M_ts={M_ts}, M_es={M_es}, M_dr={M_dr}, M_pr={M_pr}')
@@ -23,8 +24,9 @@ def main():
     user.rating = room_rating
   db.session.commit()
 
-def calculate_peer_rating_metric(user):
-  return .5
+def calculate_peer_rating_metric(user, suite):
+  ratings = [rating.rating for rating in PeerRating.query.filter(and_(PeerRating.suite_id == suite.id, PeerRating.ratee_user_id == user.id)).all()]
+  return mean(ratings)
 
 def calculate_deadline_reliability(user):
   assignments = Assignment.query.filter(Assignment.user_id == user.id).all()

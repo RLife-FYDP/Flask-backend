@@ -30,6 +30,14 @@ class User(Base):
     tasks = db.relationship("Task", secondary="assignments", viewonly=True)
     expense_items = db.relationship("ExpenseItem", secondary="user_expenses", viewonly=True)
 
+class PeerRating(Base):
+    __tablename__ = 'peer_ratings'
+    id = db.Column(db.Integer, primary_key=True)
+    rater_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    ratee_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    suite_id = db.Column(db.Integer, db.ForeignKey('suites.id'))
+    rating = db.Column(db.Integer, nullable=False)
+
 
 class Location(Base):
     __tablename__ = 'locations'
@@ -249,6 +257,9 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     suite = ma.Nested(SuiteSchema)
     expense_items = ma.Nested(ExpenseItemSchema, many=True)
 
+class PeerRatingSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = PeerRating
 
 class SuiteSchema(ma.SQLAlchemyAutoSchema):
     class Meta:

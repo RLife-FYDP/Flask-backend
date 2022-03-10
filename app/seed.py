@@ -112,5 +112,25 @@ for suite in suites:
             )
         db.session.add(expense_item)
 
+for suite in suites:
+    users = suite.users
+    for i in range(len(users)-1):
+        for j in range(i+1, len(users)):
+            peer_rating_i_j = PeerRating(
+                suite_id=suite.id,
+                rater_user_id=users[i].id,
+                ratee_user_id=users[j].id,
+                rating=random.randint(0,1)
+            )
+
+            peer_rating_j_i = PeerRating(
+                suite_id=suite.id,
+                rater_user_id=users[j].id,
+                ratee_user_id=users[i].id,
+                rating=random.randint(0,1)
+            )
+            db.session.add(peer_rating_i_j)
+            db.session.add(peer_rating_j_i)
+
 db.session.commit()
 db.session.close()
