@@ -44,10 +44,7 @@ def create_tasks(user):
 @tasks.route('/<int:id>', methods=['PUT'])
 @authorize
 def update_task(user, id):
-    try:
-        task_data = task_schema.load(request.get_json())
-    except ValidationError as err:
-        return {"message": "Bad post body", "errors": str(err)}, 400
+    task_data = request.get_json()
     task = Task.query.get_or_404(id)
     task.title = task_data['title']
     task.description = task_data['description'],
