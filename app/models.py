@@ -186,6 +186,7 @@ class MessageSchema(ma.SQLAlchemyAutoSchema):
 class SuiteMessageSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = SuiteMessage
+
     from_user = fields.Int()
 
 
@@ -211,6 +212,7 @@ class ExpenseItemSchema(ma.SQLAlchemyAutoSchema):
 
     users = ma.Nested(lambda: UserSchema(only=["id"]), many=True)
 
+
 class UserExpenseSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = UserExpense
@@ -233,7 +235,7 @@ class TaskSchema(ma.SQLAlchemyAutoSchema):
     lastCompleted = fields.DateTime(allow_none=True)
     rruleOption = fields.String()
     assignee = fields.List(fields.Int)
-    isCompleted= fields.Boolean()
+    isCompleted = fields.Int()
 
     messages = ma.Nested(TaskMessageSchema, many=True)
     users = ma.Nested(lambda: UserSchema(only=["id"]), many=True)
