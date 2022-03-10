@@ -129,6 +129,7 @@ class Task(Base):
     start_time = db.Column(db.DateTime, nullable=True)
     last_completed = db.Column(db.DateTime, nullable=True)
     rrule_option = db.Column(db.String(255), nullable=True)
+    is_completed = db.Column(db.Boolean, default=False)
 
     messages = db.relationship('TaskMessage', backref='task', lazy=True, cascade="all, delete")
     assignments = db.relationship('Assignment', backref='task', cascade="all, delete")
