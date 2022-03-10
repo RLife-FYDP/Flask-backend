@@ -1,9 +1,11 @@
+import json
+
 from flask import Blueprint, jsonify, request
 from marshmallow import Schema, fields, ValidationError, validate
 
 from jwt.exceptions import InvalidSignatureError
 from sqlalchemy.exc import NoResultFound
-from app.models import User, UserSchema
+from app.models import User, UserSchema, Setting
 from app import db
 from app.utils.auth import hash_password, verify_password, create_access_token, create_refresh_token, \
     decode_refresh_token
@@ -48,6 +50,9 @@ def create_user():
     # generate password digest
     password_digest = hash_password(user_data['password'])
 
+    setting = Setting(
+        setting=json.dumps({"Version": "1.0.1", "Spec": {"theme": "#db9b12", "language": "English"}})
+    )
     # create user in database
     user = User(
         first_name=user_data['first_name'],
@@ -57,8 +62,7 @@ def create_user():
         gender=user_data['gender'],
         password_digest=password_digest,
         rating=-1,
-        suite_id=4
-        # TODO: so troll dump all the new boys in suite 4 so they at least have a suite so we can test the app
+        setting=setting,
     )
     db.session.add(user)
     db.session.commit()

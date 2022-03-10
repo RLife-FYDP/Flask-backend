@@ -20,7 +20,6 @@ def get_all_suites():
 @authorize
 def create_suite(user):
     body = request.get_json()
-    print(body)
     suite = Suite(
         active=True,
         canvas=CANVAS_BLOB,
