@@ -233,6 +233,7 @@ class TaskSchema(ma.SQLAlchemyAutoSchema):
     lastCompleted = fields.DateTime(allow_none=True)
     rruleOption = fields.String()
     assignee = fields.List(fields.Int)
+    isCompleted= fields.Bool()
 
     messages = ma.Nested(TaskMessageSchema, many=True)
     users = ma.Nested(lambda: UserSchema(only=["id"]), many=True)
