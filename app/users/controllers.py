@@ -1,5 +1,6 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 
+from app import db
 from app.auth.middleware import authorize
 from app.models import User, UserSchema, TaskSchema, UserExpense, ExpenseItem
 
@@ -14,9 +15,24 @@ def get_all_users():
     return jsonify(users_schema.dump(users))
 
 
-@users.route('/<int:id>')
+@users.route('/<int:id>', methods=['GET'])
 def get_user(id):
     user = User.query.get(id)
+    user_schema = UserSchema(exclude=['password_digest'])
+    return jsonify(user_schema.dump(user))
+
+@users.route('/<int:id>', methods=['PUT'])
+@authorize
+def put_user(user, id):
+    body = request.get_json()
+    user: User = User.query.get_or_404(id)
+    if 'firstName' in body:
+        user.first_name = body['firstName']
+    if 'lastName' in body:
+        user.last_name = body['lastName']
+    if 'email' in body:
+        user.email = body['email']
+    db.session.commit()
     user_schema = UserSchema(exclude=['password_digest'])
     return jsonify(user_schema.dump(user))
 
