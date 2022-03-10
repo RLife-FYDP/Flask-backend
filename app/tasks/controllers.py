@@ -56,6 +56,7 @@ def update_task(user, id):
     task.start_time = task_data['startTime']
     task.last_completed = task_data.get('lastCompleted'),
     task.rrule_option = task_data['rruleOption'],
+    task.is_completed = task_data['isCompleted'],
     task.updated_at = datetime.datetime.now()
     try:
         db.session.commit()
