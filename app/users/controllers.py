@@ -32,6 +32,8 @@ def put_user(user, id):
         user.last_name = body['lastName']
     if 'email' in body:
         user.email = body['email']
+    if 'profileImageLink' in body:
+        user.profile_img_link = body['profileImageLink']
     db.session.commit()
     user_schema = UserSchema(exclude=['password_digest'])
     return jsonify(user_schema.dump(user))
