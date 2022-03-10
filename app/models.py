@@ -229,7 +229,7 @@ class TaskSchema(ma.SQLAlchemyAutoSchema):
     tags = fields.String()
     description = fields.String()
     startTime = fields.DateTime()
-    lastCompleted = fields.DateTime()
+    lastCompleted = fields.DateTime(allow_none=True)
     rruleOption = fields.String()
     assignee = fields.List(fields.Int)
 
