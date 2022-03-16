@@ -5,7 +5,7 @@ load_dotenv()
 # Statement for enabling the development environment
 DEBUG = True
 DATABASE_PASSWORD = 'Y3A8Jvg2yGEWtyBP'
-SQLALCHEMY_DATABASE_URI = f'mysql://admin:{DATABASE_PASSWORD}@database-1.cph7qam3uoxb.us-east-1.rds.amazonaws.com/rlife'
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:@localhost/FYPD'
 DATABASE_CONNECT_OPTIONS = {}
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ENGINE_OPTIONS = { "pool_pre_ping": True, "pool_recycle": 300 }
